@@ -24,6 +24,16 @@ public class ErrorHandler {
         return error;
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> handleNotFoundException(NotFoundException e) {
+        log.warn("Объект не найден: {}", e.getMessage());
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Not Found");
+        error.put("message", e.getMessage());
+        return error;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
