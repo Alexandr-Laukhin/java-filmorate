@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,14 @@ public class FilmController {
 
     @GetMapping
     public List<Film> getAllFilms() {
-        log.info("Получен запрос на получение всех фильмов. Количество: {}", films.size());
-        return new ArrayList<>(films.values());
+        List<Film> result = new ArrayList<>(films.values());
+        log.info("Получен запрос на получение всех фильмов. Количество: {}", result.size());
+        return result;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film createFilm(@Valid @RequestBody Film film) {
+    public Film createFilm(@jakarta.validation.groups.ConvertGroup(from = Default.class, to = ru.yandex.practicum.filmorate.model.validation.Create.class) @Valid @RequestBody Film film) {
         validateFilm(film);
         film.setId(nextId++);
         films.put(film.getId(), film);
@@ -39,15 +41,28 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) {
+    public Film updateFilm(@jakarta.validation.groups.ConvertGroup(from = Default.class, to = ru.yandex.practicum.filmorate.model.validation.Update.class) @Valid @RequestBody Film film) {
         if (film.getId() == null || !films.containsKey(film.getId())) {
             log.warn("Попытка обновления несуществующего фильма с id: {}", film.getId());
             throw new NotFoundException("Фильм с id " + film.getId() + " не найден");
         }
-        validateFilm(film);
-        films.put(film.getId(), film);
-        log.info("Обновлен фильм: {}", film);
-        return film;
+        Film stored = films.get(film.getId());
+        if (film.getName() != null && !film.getName().isBlank()) {
+            stored.setName(film.getName());
+        }
+        if (film.getDescription() != null) {
+            stored.setDescription(film.getDescription());
+        }
+        if (film.getReleaseDate() != null) {
+            stored.setReleaseDate(film.getReleaseDate());
+        }
+        if (film.getDuration() != null) {
+            stored.setDuration(film.getDuration());
+        }
+        validateFilm(stored);
+        films.put(stored.getId(), stored);
+        log.info("Обновлен фильм: {}", stored);
+        return stored;
     }
 
     private void validateFilm(Film film) {
