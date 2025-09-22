@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,47 +23,58 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
-        log.info("Получен запрос на получение всех пользователей. Количество: {}", users.size());
-        return new ArrayList<>(users.values());
+        List<User> result = new ArrayList<>(users.values());
+        log.info("Получен запрос на получение всех пользователей. Количество: {}", result.size());
+        return result;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Valid @RequestBody User user) {
+    public User createUser(@jakarta.validation.groups.ConvertGroup(from = Default.class, to = ru.yandex.practicum.filmorate.model.validation.Create.class) @Valid @RequestBody User user) {
         validateUser(user);
         user.setId(nextId++);
-
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-            log.info("Для пользователя {} установлено имя из логина: {}", user.getId(), user.getLogin());
-        }
-
+        applyDefaultName(user);
         users.put(user.getId(), user);
         log.info("Добавлен новый пользователь: {}", user);
         return user;
     }
 
     @PutMapping
-    public User updateUser(@Valid @RequestBody User user) {
+    public User updateUser(@jakarta.validation.groups.ConvertGroup(from = Default.class, to = ru.yandex.practicum.filmorate.model.validation.Update.class) @Valid @RequestBody User user) {
         if (user.getId() == null || !users.containsKey(user.getId())) {
             log.warn("Попытка обновления несуществующего пользователя с id: {}", user.getId());
             throw new NotFoundException("Пользователь с id " + user.getId() + " не найден");
         }
-        validateUser(user);
-
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
+        User stored = users.get(user.getId());
+        if (user.getEmail() != null) {
+            stored.setEmail(user.getEmail());
         }
-
-        users.put(user.getId(), user);
-        log.info("Обновлен пользователь: {}", user);
-        return user;
+        if (user.getLogin() != null) {
+            stored.setLogin(user.getLogin());
+        }
+        if (user.getName() != null) {
+            stored.setName(user.getName());
+        }
+        if (user.getBirthday() != null) {
+            stored.setBirthday(user.getBirthday());
+        }
+        applyDefaultName(stored);
+        validateUser(stored);
+        users.put(stored.getId(), stored);
+        log.info("Обновлен пользователь: {}", stored);
+        return stored;
     }
 
     private void validateUser(User user) {
         if (user.getLogin().contains(" ")) {
             log.warn("Логин пользователя содержит пробелы: {}", user.getLogin());
             throw new ValidationException("Логин не может содержать пробелы");
+        }
+    }
+
+    private void applyDefaultName(User user) {
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getLogin());
         }
     }
 }
