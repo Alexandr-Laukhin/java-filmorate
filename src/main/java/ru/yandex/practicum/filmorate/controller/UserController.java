@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.groups.Default;
+// removed unused imports
+import org.springframework.validation.annotation.Validated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@jakarta.validation.groups.ConvertGroup(from = Default.class, to = ru.yandex.practicum.filmorate.model.validation.Create.class) @Valid @RequestBody User user) {
+    public User createUser(@Validated(ru.yandex.practicum.filmorate.model.validation.Create.class) @RequestBody User user) {
         validateUser(user);
         user.setId(nextId++);
         applyDefaultName(user);
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@jakarta.validation.groups.ConvertGroup(from = Default.class, to = ru.yandex.practicum.filmorate.model.validation.Update.class) @Valid @RequestBody User user) {
+    public User updateUser(@Validated(ru.yandex.practicum.filmorate.model.validation.Update.class) @RequestBody User user) {
         if (user.getId() == null || !users.containsKey(user.getId())) {
             log.warn("Попытка обновления несуществующего пользователя с id: {}", user.getId());
             throw new NotFoundException("Пользователь с id " + user.getId() + " не найден");
