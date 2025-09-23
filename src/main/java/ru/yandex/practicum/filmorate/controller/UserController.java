@@ -1,13 +1,15 @@
 package ru.yandex.practicum.filmorate.controller;
 
 // removed unused imports
-import org.springframework.validation.annotation.Validated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.validation.Create;
+import ru.yandex.practicum.filmorate.model.validation.Update;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +32,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Validated(ru.yandex.practicum.filmorate.model.validation.Create.class) @RequestBody User user) {
+    public User createUser(@Validated(Create.class) @RequestBody User user) {
         validateUser(user);
         user.setId(nextId++);
         applyDefaultName(user);
@@ -40,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@Validated(ru.yandex.practicum.filmorate.model.validation.Update.class) @RequestBody User user) {
+    public User updateUser(@Validated(Update.class) @RequestBody User user) {
         if (user.getId() == null || !users.containsKey(user.getId())) {
             log.warn("Попытка обновления несуществующего пользователя с id: {}", user.getId());
             throw new NotFoundException("Пользователь с id " + user.getId() + " не найден");
