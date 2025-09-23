@@ -1,13 +1,15 @@
 package ru.yandex.practicum.filmorate.controller;
 
 // removed unused imports
-import org.springframework.validation.annotation.Validated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.validation.Create;
+import ru.yandex.practicum.filmorate.model.validation.Update;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film createFilm(@Validated(ru.yandex.practicum.filmorate.model.validation.Create.class) @RequestBody Film film) {
+    public Film createFilm(@Validated(Create.class) @RequestBody Film film) {
         validateFilm(film);
         film.setId(nextId++);
         films.put(film.getId(), film);
@@ -41,7 +43,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@Validated(ru.yandex.practicum.filmorate.model.validation.Update.class) @RequestBody Film film) {
+    public Film updateFilm(@Validated(Update.class) @RequestBody Film film) {
         if (film.getId() == null || !films.containsKey(film.getId())) {
             log.warn("Попытка обновления несуществующего фильма с id: {}", film.getId());
             throw new NotFoundException("Фильм с id " + film.getId() + " не найден");
