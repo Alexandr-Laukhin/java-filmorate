@@ -26,15 +26,14 @@ class FilmValidationTests {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
         film = new Film();
+        film.setName("Test Film");
+        film.setDescription("Test Description");
+        film.setReleaseDate(LocalDate.of(2020, 1, 1));
+        film.setDuration(120);
     }
 
     @Test
     void filmCreate_valid_ok() {
-        film.setName("Test Film");
-        film.setDescription("D".repeat(200));
-        film.setReleaseDate(LocalDate.of(1895, 12, 28));
-        film.setDuration(1);
-
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Create.class);
         assertTrue(violations.isEmpty());
     }
@@ -42,8 +41,6 @@ class FilmValidationTests {
     @Test
     void filmCreate_emptyName_violation() {
         film.setName(" ");
-        film.setReleaseDate(LocalDate.of(2020, 1, 1));
-        film.setDuration(10);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Create.class);
         assertFalse(violations.isEmpty());
@@ -55,8 +52,7 @@ class FilmValidationTests {
 
     @Test
     void filmCreate_nullReleaseDate_violation() {
-        film.setName("Name");
-        film.setDuration(10);
+        film.setReleaseDate(null);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Create.class);
         assertFalse(violations.isEmpty());
@@ -68,10 +64,7 @@ class FilmValidationTests {
 
     @Test
     void filmCreate_description201_violation() {
-        film.setName("Name");
         film.setDescription("D".repeat(201));
-        film.setReleaseDate(LocalDate.of(2020, 1, 1));
-        film.setDuration(10);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Create.class);
         assertFalse(violations.isEmpty());
@@ -83,8 +76,6 @@ class FilmValidationTests {
 
     @Test
     void filmCreate_durationZero_violation() {
-        film.setName("Name");
-        film.setReleaseDate(LocalDate.of(2020, 1, 1));
         film.setDuration(0);
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Create.class);
@@ -97,7 +88,7 @@ class FilmValidationTests {
 
     @Test
     void filmUpdate_withoutId_violation() {
-        film.setName("Name");
+        // Не устанавливаем id, используем значения из @BeforeEach
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Update.class);
         assertFalse(violations.isEmpty());
@@ -141,6 +132,3 @@ class FilmValidationTests {
         assertTrue(hasDurationMessage);
     }
 }
-
-
-
