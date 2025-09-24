@@ -26,13 +26,14 @@ class UserValidationTests {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
         user = new User();
+        // Устанавливаем общие валидные значения для всех тестов
+        user.setEmail("test@example.com");
+        user.setLogin("testuser");
+        user.setBirthday(LocalDate.of(1990, 1, 1));
     }
 
     @Test
     void userCreate_valid_ok() {
-        user.setEmail("a@b.com");
-        user.setLogin("login");
-        user.setBirthday(LocalDate.now());
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Create.class);
         assertTrue(violations.isEmpty());
@@ -41,7 +42,6 @@ class UserValidationTests {
     @Test
     void userCreate_blankEmail_violation() {
         user.setEmail(" ");
-        user.setLogin("login");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Create.class);
         assertFalse(violations.isEmpty());
@@ -54,7 +54,6 @@ class UserValidationTests {
     @Test
     void userCreate_invalidEmail_violation() {
         user.setEmail("invalid");
-        user.setLogin("login");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Create.class);
         assertFalse(violations.isEmpty());
@@ -66,7 +65,6 @@ class UserValidationTests {
 
     @Test
     void userCreate_blankLogin_violation() {
-        user.setEmail("a@b.com");
         user.setLogin(" ");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Create.class);
@@ -79,7 +77,6 @@ class UserValidationTests {
 
     @Test
     void userCreate_loginWithSpaces_violation() {
-        user.setEmail("a@b.com");
         user.setLogin("lo gin");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Create.class);
@@ -92,8 +89,6 @@ class UserValidationTests {
 
     @Test
     void userCreate_birthdayInFuture_violation() {
-        user.setEmail("a@b.com");
-        user.setLogin("login");
         user.setBirthday(LocalDate.now().plusDays(1));
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Create.class);
@@ -106,7 +101,6 @@ class UserValidationTests {
 
     @Test
     void userUpdate_withoutId_violation() {
-        user.setEmail("a@b.com");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user, Update.class);
         assertFalse(violations.isEmpty());
@@ -150,6 +144,3 @@ class UserValidationTests {
         assertTrue(hasLoginSpacesOnUpdateMessage);
     }
 }
-
-
-
