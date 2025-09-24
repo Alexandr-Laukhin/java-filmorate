@@ -26,7 +26,6 @@ class UserValidationTests {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
         user = new User();
-        // Устанавливаем общие валидные значения для всех тестов
         user.setEmail("test@example.com");
         user.setLogin("testuser");
         user.setBirthday(LocalDate.of(1990, 1, 1));

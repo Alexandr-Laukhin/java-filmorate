@@ -88,7 +88,6 @@ class FilmValidationTests {
 
     @Test
     void filmUpdate_withoutId_violation() {
-        // Не устанавливаем id, используем значения из @BeforeEach
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film, Update.class);
         assertFalse(violations.isEmpty());
