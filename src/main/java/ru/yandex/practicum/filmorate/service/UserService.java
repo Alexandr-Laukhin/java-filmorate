@@ -47,41 +47,41 @@ public class UserService {
     public void addFriend(Integer userId, Integer friendId) {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
-        
+
         if (user.getFriends().contains(friendId)) {
             log.warn("Пользователь {} уже является другом пользователя {}", friendId, userId);
             throw new ValidationException("Пользователь уже является другом");
         }
-        
+
         user.getFriends().add(friendId);
         friend.getFriends().add(userId);
-        
+
         log.info("Пользователь {} добавлен в друзья к пользователю {}", friendId, userId);
     }
 
     public void removeFriend(Integer userId, Integer friendId) {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
-        
+
         if (!user.getFriends().contains(friendId)) {
             log.warn("Пользователь {} не является другом пользователя {}", friendId, userId);
             throw new ValidationException("Пользователь не является другом");
         }
-        
+
         user.getFriends().remove(friendId);
         friend.getFriends().remove(userId);
-        
+
         log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
     }
 
     public List<User> getFriends(Integer userId) {
         User user = userStorage.getUserById(userId);
         List<User> friends = new ArrayList<>();
-        
+
         for (Integer friendId : user.getFriends()) {
             friends.add(userStorage.getUserById(friendId));
         }
-        
+
         log.info("Получен список друзей пользователя {}. Количество: {}", userId, friends.size());
         return friends;
     }
@@ -89,16 +89,16 @@ public class UserService {
     public List<User> getCommonFriends(Integer userId, Integer otherId) {
         User user = userStorage.getUserById(userId);
         User other = userStorage.getUserById(otherId);
-        
+
         Set<Integer> commonFriendIds = new HashSet<>(user.getFriends());
         commonFriendIds.retainAll(other.getFriends());
-        
+
         List<User> commonFriends = new ArrayList<>();
         for (Integer friendId : commonFriendIds) {
             commonFriends.add(userStorage.getUserById(friendId));
         }
-        
-        log.info("Получен список общих друзей пользователей {} и {}. Количество: {}", 
+
+        log.info("Получен список общих друзей пользователей {} и {}. Количество: {}",
                 userId, otherId, commonFriends.size());
         return commonFriends;
     }
