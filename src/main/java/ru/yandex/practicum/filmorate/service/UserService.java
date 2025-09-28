@@ -88,6 +88,10 @@ public class UserService {
     }
 
     public List<User> getFriends(Integer userId) {
+        if (userId == null) {
+            throw new ValidationException("ID пользователя не может быть null");
+        }
+
         User user = userStorage.getUserById(userId);
         List<User> friends = new ArrayList<>();
 
@@ -100,6 +104,10 @@ public class UserService {
     }
 
     public List<User> getCommonFriends(Integer userId, Integer otherId) {
+        if (userId == null || otherId == null) {
+            throw new ValidationException("ID пользователей не могут быть null");
+        }
+
         User user = userStorage.getUserById(userId);
         User other = userStorage.getUserById(otherId);
 

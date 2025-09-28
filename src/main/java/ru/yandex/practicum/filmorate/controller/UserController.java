@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.validation.Create;
 import ru.yandex.practicum.filmorate.model.validation.Update;
@@ -30,6 +31,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Integer id) {
+        if (id == null) {
+            throw new ValidationException("ID пользователя не может быть null");
+        }
         return userService.getUserById(id);
     }
 

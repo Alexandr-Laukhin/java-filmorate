@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.validation.Create;
 import ru.yandex.practicum.filmorate.model.validation.Update;
@@ -30,6 +31,9 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public Film getFilmById(@PathVariable Integer id) {
+        if (id == null) {
+            throw new ValidationException("ID фильма не может быть null");
+        }
         return filmService.getFilmById(id);
     }
 
