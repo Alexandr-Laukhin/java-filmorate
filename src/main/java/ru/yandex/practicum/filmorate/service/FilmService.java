@@ -47,24 +47,24 @@ public class FilmService {
 
     public void addLike(Integer filmId, Integer userId) {
         Film film = filmStorage.getFilmById(filmId);
-        
+
         if (film.getLikes().contains(userId)) {
             log.warn("Пользователь {} уже поставил лайк фильму {}", userId, filmId);
             throw new ValidationException("Пользователь уже поставил лайк этому фильму");
         }
-        
+
         film.getLikes().add(userId);
         log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
     }
 
     public void removeLike(Integer filmId, Integer userId) {
         Film film = filmStorage.getFilmById(filmId);
-        
+
         if (!film.getLikes().contains(userId)) {
             log.warn("Пользователь {} не ставил лайк фильму {}", userId, filmId);
             throw new ValidationException("Пользователь не ставил лайк этому фильму");
         }
-        
+
         film.getLikes().remove(userId);
         log.info("Пользователь {} убрал лайк с фильма {}", userId, filmId);
     }
@@ -73,12 +73,12 @@ public class FilmService {
         if (count == null || count <= 0) {
             count = 10;
         }
-        
+
         List<Film> popularFilms = filmStorage.getAllFilms().stream()
                 .sorted(Comparator.comparingInt((Film film) -> film.getLikes().size()).reversed())
                 .limit(count)
                 .collect(Collectors.toList());
-        
+
         log.info("Получен список популярных фильмов. Количество: {}", popularFilms.size());
         return popularFilms;
     }

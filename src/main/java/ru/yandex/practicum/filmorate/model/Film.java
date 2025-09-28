@@ -23,7 +23,8 @@ public class Film {
     @NotNull(groups = Create.class, message = "Дата релиза обязательна")
     private LocalDate releaseDate;
 
-    @Positive(groups = {Create.class, Update.class}, message = "Продолжительность фильма должна быть положительным числом")
+    @Positive(groups = {Create.class, Update.class},
+            message = "Продолжительность фильма должна быть положительным числом")
     private Integer duration;
 
     private Set<Integer> likes = new HashSet<>();
