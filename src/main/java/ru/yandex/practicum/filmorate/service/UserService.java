@@ -76,15 +76,13 @@ public class UserService {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
 
-        if (!user.getFriends().contains(friendId)) {
-            log.warn("Пользователь {} не является другом пользователя {}", friendId, userId);
-            throw new ValidationException("Пользователь не является другом");
+        if (user.getFriends().contains(friendId)) {
+            user.getFriends().remove(friendId);
+            friend.getFriends().remove(userId);
+            log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
+        } else {
+            log.info("Пользователь {} не является другом пользователя {}, операция пропущена", friendId, userId);
         }
-
-        user.getFriends().remove(friendId);
-        friend.getFriends().remove(userId);
-
-        log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
     }
 
     public List<User> getFriends(Integer userId) {
