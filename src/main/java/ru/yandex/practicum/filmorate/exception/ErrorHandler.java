@@ -25,7 +25,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleNotFoundException(NotFoundException e) {
         log.warn("Объект не найден: {}", e.getMessage());
         Map<String, String> error = new HashMap<>();

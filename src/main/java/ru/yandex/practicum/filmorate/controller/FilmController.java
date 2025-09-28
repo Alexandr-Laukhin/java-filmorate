@@ -1,75 +1,69 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.validation.Create;
 import ru.yandex.practicum.filmorate.model.validation.Update;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/films")
 @Slf4j
 public class FilmController {
-    private final Map<Integer, Film> films = new HashMap<>();
-    private int nextId = 1;
-    private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
+    private final FilmService filmService;
+
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @GetMapping
     public List<Film> getAllFilms() {
-        List<Film> result = new ArrayList<>(films.values());
-        log.info("Получен запрос на получение всех фильмов. Количество: {}", result.size());
-        return result;
+        return filmService.getAllFilms();
+    }
+
+    @GetMapping("/{id}")
+    public Film getFilmById(@PathVariable Integer id) {
+        return filmService.getFilmById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Film createFilm(@Validated(Create.class) @RequestBody Film film) {
-        validateFilm(film);
-        film.setId(nextId++);
-        films.put(film.getId(), film);
-        log.info("Добавлен новый фильм: {}", film);
-        return film;
+        return filmService.createFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@Validated(Update.class) @RequestBody Film film) {
-        if (film.getId() == null || !films.containsKey(film.getId())) {
-            log.warn("Попытка обновления несуществующего фильма с id: {}", film.getId());
-            throw new NotFoundException("Фильм с id " + film.getId() + " не найден");
-        }
-        Film stored = films.get(film.getId());
-        if (film.getName() != null && !film.getName().isBlank()) {
-            stored.setName(film.getName());
-        }
-        if (film.getDescription() != null) {
-            stored.setDescription(film.getDescription());
-        }
-        if (film.getReleaseDate() != null) {
-            stored.setReleaseDate(film.getReleaseDate());
-        }
-        if (film.getDuration() != null) {
-            stored.setDuration(film.getDuration());
-        }
-        validateFilm(stored);
-        films.put(stored.getId(), stored);
-        log.info("Обновлен фильм: {}", stored);
-        return stored;
+        return filmService.updateFilm(film);
     }
 
-    private void validateFilm(Film film) {
-        if (film.getReleaseDate().isBefore(MIN_RELEASE_DATE)) {
-            log.warn("Дата релиза {} раньше минимальной допустимой {}", film.getReleaseDate(), MIN_RELEASE_DATE);
-            throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
-        }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFilm(@PathVariable Integer id) {
+        filmService.deleteFilm(id);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addLike(@PathVariable Integer id, @PathVariable Integer userId) {
+        filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeLike(@PathVariable Integer id, @PathVariable Integer userId) {
+        filmService.removeLike(id, userId);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
+        return filmService.getPopularFilms(count);
     }
 }
