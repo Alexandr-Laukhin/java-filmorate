@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -16,11 +17,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class FilmService {
     private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
     private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     @Autowired
-    public FilmService(FilmStorage filmStorage) {
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
         this.filmStorage = filmStorage;
+        this.userStorage = userStorage;
     }
 
     public List<Film> getAllFilms() {
@@ -51,6 +54,7 @@ public class FilmService {
         }
 
         Film film = filmStorage.getFilmById(filmId);
+        userStorage.getUserById(userId);
 
         if (film.getLikes().contains(userId)) {
             log.warn("Пользователь {} уже поставил лайк фильму {}", userId, filmId);
@@ -67,14 +71,14 @@ public class FilmService {
         }
 
         Film film = filmStorage.getFilmById(filmId);
+        userStorage.getUserById(userId);
 
-        if (!film.getLikes().contains(userId)) {
-            log.warn("Пользователь {} не ставил лайк фильму {}", userId, filmId);
-            throw new ValidationException("Пользователь не ставил лайк этому фильму");
+        if (film.getLikes().contains(userId)) {
+            film.getLikes().remove(userId);
+            log.info("Пользователь {} убрал лайк с фильма {}", userId, filmId);
+        } else {
+            log.info("Пользователь {} не ставил лайк фильму {}, операция пропущена", userId, filmId);
         }
-
-        film.getLikes().remove(userId);
-        log.info("Пользователь {} убрал лайк с фильма {}", userId, filmId);
     }
 
     public List<Film> getPopularFilms(Integer count) {
