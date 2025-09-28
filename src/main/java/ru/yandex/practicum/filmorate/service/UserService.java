@@ -45,6 +45,15 @@ public class UserService {
     }
 
     public void addFriend(Integer userId, Integer friendId) {
+        if (userId == null || friendId == null) {
+            throw new ValidationException("ID пользователей не могут быть null");
+        }
+
+        if (userId.equals(friendId)) {
+            log.warn("Пользователь {} пытается добавить себя в друзья", userId);
+            throw new ValidationException("Пользователь не может добавить себя в друзья");
+        }
+
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
 
@@ -60,6 +69,10 @@ public class UserService {
     }
 
     public void removeFriend(Integer userId, Integer friendId) {
+        if (userId == null || friendId == null) {
+            throw new ValidationException("ID пользователей не могут быть null");
+        }
+
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
 
