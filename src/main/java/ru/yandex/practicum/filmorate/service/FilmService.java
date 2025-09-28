@@ -46,6 +46,10 @@ public class FilmService {
     }
 
     public void addLike(Integer filmId, Integer userId) {
+        if (filmId == null || userId == null) {
+            throw new ValidationException("ID фильма и пользователя не могут быть null");
+        }
+
         Film film = filmStorage.getFilmById(filmId);
 
         if (film.getLikes().contains(userId)) {
@@ -58,6 +62,10 @@ public class FilmService {
     }
 
     public void removeLike(Integer filmId, Integer userId) {
+        if (filmId == null || userId == null) {
+            throw new ValidationException("ID фильма и пользователя не могут быть null");
+        }
+
         Film film = filmStorage.getFilmById(filmId);
 
         if (!film.getLikes().contains(userId)) {
@@ -84,7 +92,7 @@ public class FilmService {
     }
 
     private void validateFilm(Film film) {
-        if (film.getReleaseDate().isBefore(MIN_RELEASE_DATE)) {
+        if (film.getReleaseDate() != null && film.getReleaseDate().isBefore(MIN_RELEASE_DATE)) {
             log.warn("Дата релиза {} раньше минимальной допустимой {}", film.getReleaseDate(), MIN_RELEASE_DATE);
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         }
