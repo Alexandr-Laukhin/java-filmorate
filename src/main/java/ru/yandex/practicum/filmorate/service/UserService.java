@@ -68,7 +68,7 @@ public class UserService {
             log.info("Пользователь {} не является другом пользователя {}, операция пропущена", friendId, userId);
             return;
         }
-        
+
         user.getFriends().remove(friendId);
         friend.getFriends().remove(userId);
         log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
