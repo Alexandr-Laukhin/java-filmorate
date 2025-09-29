@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -14,13 +14,9 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
     private final UserStorage userStorage;
-
-    @Autowired
-    public UserService(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
 
     public List<User> getAllUsers() {
         return userStorage.getAllUsers();
@@ -36,20 +32,16 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    public User getUserById(Integer id) {
+    public User getUserById(int id) {
         return userStorage.getUserById(id);
     }
 
-    public void deleteUser(Integer id) {
+    public void deleteUser(int id) {
         userStorage.deleteUser(id);
     }
 
-    public void addFriend(Integer userId, Integer friendId) {
-        if (userId == null || friendId == null) {
-            throw new ValidationException("ID пользователей не могут быть null");
-        }
-
-        if (userId.equals(friendId)) {
+    public void addFriend(int userId, int friendId) {
+        if (userId == friendId) {
             log.warn("Пользователь {} пытается добавить себя в друзья", userId);
             throw new ValidationException("Пользователь не может добавить себя в друзья");
         }
@@ -68,28 +60,21 @@ public class UserService {
         log.info("Пользователь {} добавлен в друзья к пользователю {}", friendId, userId);
     }
 
-    public void removeFriend(Integer userId, Integer friendId) {
-        if (userId == null || friendId == null) {
-            throw new ValidationException("ID пользователей не могут быть null");
-        }
-
+    public void removeFriend(int userId, int friendId) {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
 
-        if (user.getFriends().contains(friendId)) {
-            user.getFriends().remove(friendId);
-            friend.getFriends().remove(userId);
-            log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
-        } else {
+        if (!user.getFriends().contains(friendId)) {
             log.info("Пользователь {} не является другом пользователя {}, операция пропущена", friendId, userId);
+            return;
         }
+        
+        user.getFriends().remove(friendId);
+        friend.getFriends().remove(userId);
+        log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
     }
 
-    public List<User> getFriends(Integer userId) {
-        if (userId == null) {
-            throw new ValidationException("ID пользователя не может быть null");
-        }
-
+    public List<User> getFriends(int userId) {
         User user = userStorage.getUserById(userId);
         List<User> friends = new ArrayList<>();
 
@@ -101,11 +86,7 @@ public class UserService {
         return friends;
     }
 
-    public List<User> getCommonFriends(Integer userId, Integer otherId) {
-        if (userId == null || otherId == null) {
-            throw new ValidationException("ID пользователей не могут быть null");
-        }
-
+    public List<User> getCommonFriends(int userId, int otherId) {
         User user = userStorage.getUserById(userId);
         User other = userStorage.getUserById(otherId);
 
