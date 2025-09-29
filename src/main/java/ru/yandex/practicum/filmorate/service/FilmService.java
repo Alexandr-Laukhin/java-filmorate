@@ -64,7 +64,6 @@ public class FilmService {
             log.info("Пользователь {} не ставил лайк фильму {}, операция пропущена", userId, filmId);
             return;
         }
-        
         film.getLikes().remove(userId);
         log.info("Пользователь {} убрал лайк с фильма {}", userId, filmId);
     }
