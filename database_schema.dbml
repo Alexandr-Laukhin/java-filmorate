@@ -1,0 +1,57 @@
+Table users {
+  id integer [primary key]
+  email varchar [unique, not null]
+  login varchar [unique, not null]
+  name varchar
+  birthday date
+}
+
+Table mpa_ratings {
+  id integer [primary key]
+  code varchar [unique, not null]
+  description text
+}
+
+Table genres {
+  id integer [primary key]
+  name varchar [unique, not null]
+}
+
+Table films {
+  id integer [primary key]
+  name varchar [not null]
+  description text
+  release_date date [not null]
+  duration integer [not null]
+  mpa_id integer
+}
+
+Table film_genres {
+  film_id integer
+  genre_id integer
+}
+
+Table likes {
+  film_id integer
+  user_id integer
+}
+
+Table friendships {
+  user_id integer
+  friend_id integer
+  status varchar [default: 'UNCONFIRMED']
+}
+
+Ref: films.mpa_id > mpa_ratings.id
+
+Ref: film_genres.film_id > films.id
+
+Ref: film_genres.genre_id > genres.id
+
+Ref: likes.film_id > films.id
+
+Ref: likes.user_id > users.id
+
+Ref: friendships.user_id > users.id
+
+Ref: friendships.friend_id > users.id
