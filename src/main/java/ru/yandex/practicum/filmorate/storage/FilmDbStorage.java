@@ -37,13 +37,13 @@ public class FilmDbStorage implements FilmStorage {
             film.setReleaseDate(releaseDate.toLocalDate());
         }
         film.setDuration(rs.getInt("duration"));
-        
+
         int mpaId = rs.getInt("mpa_id");
         if (!rs.wasNull() && mpaId != 0) {
             MpaRating mpa = getMpaRatingById(mpaId);
             film.setMpa(mpa);
         }
-        
+
         return film;
     };
 
@@ -72,10 +72,10 @@ public class FilmDbStorage implements FilmStorage {
             ps.setObject(5, film.getMpa() != null && film.getMpa().getId() != 0 ? film.getMpa().getId() : null);
             return ps;
         }, keyHolder);
-        
+
         int id = keyHolder.getKey().intValue();
         film.setId(id);
-        
+
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             saveFilmGenres(film);
         }
@@ -94,16 +94,16 @@ public class FilmDbStorage implements FilmStorage {
             film.getDuration(),
             film.getMpa() != null && film.getMpa().getId() != 0 ? film.getMpa().getId() : null,
             film.getId());
-        
+
         if (rowsUpdated == 0) {
             throw new NotFoundException("Фильм с id " + film.getId() + " не найден");
         }
-        
+
         deleteFilmGenres(film.getId());
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             saveFilmGenres(film);
         }
-        
+
         log.info("Обновлен фильм с id: {}", film.getId());
         return film;
     }
