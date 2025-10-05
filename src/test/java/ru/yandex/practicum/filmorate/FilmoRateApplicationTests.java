@@ -37,7 +37,7 @@ class FilmoRateApplicationTests {
                 testUser.getLogin(),
                 testUser.getName(),
                 testUser.getBirthday());
-        
+
         assertThat(rowsInserted).isEqualTo(1);
     }
 
