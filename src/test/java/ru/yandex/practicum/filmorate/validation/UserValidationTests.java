@@ -105,7 +105,7 @@ class UserValidationTests {
         assertFalse(violations.isEmpty());
         boolean hasIdUpdateMessage = violations.stream()
                 .anyMatch(v -> "id".equals(v.getPropertyPath().toString())
-                        && v.getMessage().contains("Id обязателен для обновления"));
+                        && v.getMessage().contains("Id должен быть больше 0"));
         assertTrue(hasIdUpdateMessage);
     }
 

@@ -1,18 +1,22 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.*;
-import lombok.Data;
-import ru.yandex.practicum.filmorate.model.validation.Create;
-import ru.yandex.practicum.filmorate.model.validation.Update;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import ru.yandex.practicum.filmorate.model.validation.Create;
+import ru.yandex.practicum.filmorate.model.validation.Update;
+
 @Data
 public class Film {
-    @NotNull(groups = Update.class, message = "Id обязателен для обновления")
-    private Integer id;
+    @Min(value = 1, groups = Update.class, message = "Id должен быть больше 0")
+    private int id;
 
     @NotBlank(groups = {Create.class, Update.class}, message = "Название не может быть пустым")
     private String name;
@@ -25,7 +29,9 @@ public class Film {
 
     @Positive(groups = {Create.class, Update.class},
             message = "Продолжительность фильма должна быть положительным числом")
-    private Integer duration;
+    private int duration;
 
     private Set<Integer> likes = new HashSet<>();
+    private Set<Genre> genres = new HashSet<>();
+    private MpaRating mpa;
 }
