@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -15,8 +15,8 @@ import java.util.Set;
 
 @Data
 public class User {
-    @NotNull(groups = Update.class, message = "Id обязателен для обновления")
-    private Integer id;
+    @Min(value = 1, groups = Update.class, message = "Id должен быть больше 0")
+    private int id;
 
     @NotBlank(groups = Create.class, message = "Электронная почта не может быть пустой")
     @Email(groups = {Create.class, Update.class}, message = "Электронная почта должна содержать символ @")
@@ -32,4 +32,5 @@ public class User {
     private LocalDate birthday;
 
     private Set<Integer> friends = new HashSet<>();
+    private Set<Friendship> friendships = new HashSet<>();
 }

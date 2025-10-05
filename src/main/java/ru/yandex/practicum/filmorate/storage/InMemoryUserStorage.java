@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -34,7 +35,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        if (user.getId() == null || !users.containsKey(user.getId())) {
+        if (user.getId() == 0 || !users.containsKey(user.getId())) {
             log.warn("Попытка обновления несуществующего пользователя с id: {}", user.getId());
             throw new NotFoundException("Пользователь с id " + user.getId() + " не найден");
         }
@@ -51,6 +52,11 @@ public class InMemoryUserStorage implements UserStorage {
             throw new NotFoundException("Пользователь с id " + id + " не найден");
         }
         return users.get(id);
+    }
+
+    @Override
+    public Optional<User> findUserById(int id) {
+        return Optional.ofNullable(users.get(id));
     }
 
     @Override
