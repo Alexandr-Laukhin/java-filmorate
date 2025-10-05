@@ -28,7 +28,7 @@ public class MpaRatingController {
         log.info("Получен запрос на получение рейтинга MPA с id: {}", id);
         Optional<MpaRating> rating = mpaRatingStorage.getMpaRatingById(id);
         if (rating.isEmpty()) {
-            throw new RuntimeException("Рейтинг MPA с id " + id + " не найден");
+            throw new ru.yandex.practicum.filmorate.exception.NotFoundException("Рейтинг MPA с id " + id + " не найден");
         }
         return rating.get();
     }

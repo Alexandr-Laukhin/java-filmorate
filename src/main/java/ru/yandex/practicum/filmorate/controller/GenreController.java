@@ -28,7 +28,7 @@ public class GenreController {
         log.info("Получен запрос на получение жанра с id: {}", id);
         Optional<Genre> genre = genreStorage.getGenreById(id);
         if (genre.isEmpty()) {
-            throw new RuntimeException("Жанр с id " + id + " не найден");
+            throw new ru.yandex.practicum.filmorate.exception.NotFoundException("Жанр с id " + id + " не найден");
         }
         return genre.get();
     }

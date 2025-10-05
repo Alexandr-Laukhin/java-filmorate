@@ -96,7 +96,7 @@ public class FilmDbStorage implements FilmStorage {
             film.getId());
         
         if (rowsUpdated == 0) {
-            throw new RuntimeException("Фильм с id " + film.getId() + " не найден");
+            throw new ru.yandex.practicum.filmorate.exception.NotFoundException("Фильм с id " + film.getId() + " не найден");
         }
         
         deleteFilmGenres(film.getId());
@@ -114,7 +114,7 @@ public class FilmDbStorage implements FilmStorage {
         List<Film> films = jdbcTemplate.query(sql, filmRowMapper, id);
         
         if (films.isEmpty()) {
-            throw new RuntimeException("Фильм с id " + id + " не найден");
+            throw new ru.yandex.practicum.filmorate.exception.NotFoundException("Фильм с id " + id + " не найден");
         }
         
         Film film = films.get(0);
@@ -129,7 +129,7 @@ public class FilmDbStorage implements FilmStorage {
         int rowsDeleted = jdbcTemplate.update(sql, id);
         
         if (rowsDeleted == 0) {
-            throw new RuntimeException("Фильм с id " + id + " не найден");
+            throw new ru.yandex.practicum.filmorate.exception.NotFoundException("Фильм с id " + id + " не найден");
         }
         
         log.info("Удален фильм с id: {}", id);

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -21,26 +22,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({UserDbStorage.class})
 class FilmoRateApplicationTests {
     private final UserDbStorage userStorage;
+    
+    private User testUser;
+    private User createdUser;
+
+    @BeforeEach
+    void setUp() {
+        testUser = new User();
+        testUser.setEmail("test@example.com");
+        testUser.setLogin("testuser");
+        testUser.setName("Test User");
+        testUser.setBirthday(LocalDate.of(1990, 1, 1));
+        
+        createdUser = userStorage.createUser(testUser);
+    }
 
     @Test
     public void testFindUserById() {
-        Optional<User> userOptional = userStorage.findUserById(1);
+        Optional<User> userOptional = userStorage.findUserById(createdUser.getId());
         assertThat(userOptional).isPresent()
-                .hasValueSatisfying(user ->
-                        assertThat(user).hasFieldOrPropertyWithValue("id", 1)
+                .hasValueSatisfying(foundUser ->
+                        assertThat(foundUser).hasFieldOrPropertyWithValue("id", createdUser.getId())
                 );
     }
 
     @Test
     public void testCreateUser() {
-        User user = new User();
-        user.setEmail("test@example.com");
-        user.setLogin("testuser");
-        user.setName("Test User");
-        user.setBirthday(LocalDate.of(1990, 1, 1));
-
-        User createdUser = userStorage.createUser(user);
-        assertThat(createdUser.getId()).isNotNull();
+        assertThat(createdUser.getId()).isGreaterThan(0);
         assertThat(createdUser.getEmail()).isEqualTo("test@example.com");
         assertThat(createdUser.getLogin()).isEqualTo("testuser");
     }
@@ -53,16 +61,16 @@ class FilmoRateApplicationTests {
 
     @Test
     public void testUpdateUser() {
-        User user = new User();
-        user.setEmail("update@example.com");
-        user.setLogin("updateuser");
-        user.setName("Update User");
-        user.setBirthday(LocalDate.of(1990, 1, 1));
+        User updateUser = new User();
+        updateUser.setEmail("update@example.com");
+        updateUser.setLogin("updateuser");
+        updateUser.setName("Update User");
+        updateUser.setBirthday(LocalDate.of(1990, 1, 1));
 
-        User createdUser = userStorage.createUser(user);
-        createdUser.setName("Updated Name");
+        User createdUpdateUser = userStorage.createUser(updateUser);
+        createdUpdateUser.setName("Updated Name");
 
-        User updatedUser = userStorage.updateUser(createdUser);
+        User updatedUser = userStorage.updateUser(createdUpdateUser);
         assertThat(updatedUser.getName()).isEqualTo("Updated Name");
     }
 }

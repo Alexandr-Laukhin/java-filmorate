@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 @Data
 public class User {
+    @Min(value = 1, groups = Update.class, message = "Id должен быть больше 0")
     private int id;
 
     @NotBlank(groups = Create.class, message = "Электронная почта не может быть пустой")

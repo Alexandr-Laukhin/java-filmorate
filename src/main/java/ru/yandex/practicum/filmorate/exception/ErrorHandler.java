@@ -54,6 +54,16 @@ public class ErrorHandler {
         return error;
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> handleRuntimeException(RuntimeException e) {
+        log.error("Ошибка выполнения: {}", e.getMessage(), e);
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Runtime Error");
+        error.put("message", e.getMessage());
+        return error;
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleException(Exception e) {

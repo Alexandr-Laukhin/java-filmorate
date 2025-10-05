@@ -72,7 +72,7 @@ public class UserDbStorage implements UserStorage {
             user.getId());
         
         if (rowsUpdated == 0) {
-            throw new RuntimeException("Пользователь с id " + user.getId() + " не найден");
+            throw new ru.yandex.practicum.filmorate.exception.NotFoundException("Пользователь с id " + user.getId() + " не найден");
         }
         
         log.info("Обновлен пользователь с id: {}", user.getId());
@@ -85,7 +85,7 @@ public class UserDbStorage implements UserStorage {
         List<User> users = jdbcTemplate.query(sql, userRowMapper, id);
         
         if (users.isEmpty()) {
-            throw new RuntimeException("Пользователь с id " + id + " не найден");
+            throw new ru.yandex.practicum.filmorate.exception.NotFoundException("Пользователь с id " + id + " не найден");
         }
         
         return users.get(0);
@@ -97,7 +97,7 @@ public class UserDbStorage implements UserStorage {
         int rowsDeleted = jdbcTemplate.update(sql, id);
         
         if (rowsDeleted == 0) {
-            throw new RuntimeException("Пользователь с id " + id + " не найден");
+            throw new ru.yandex.practicum.filmorate.exception.NotFoundException("Пользователь с id " + id + " не найден");
         }
         
         log.info("Удален пользователь с id: {}", id);

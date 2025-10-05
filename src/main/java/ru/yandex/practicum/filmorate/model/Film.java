@@ -11,6 +11,7 @@ import java.util.Set;
 
 @Data
 public class Film {
+    @Min(value = 1, groups = Update.class, message = "Id должен быть больше 0")
     private int id;
 
     @NotBlank(groups = {Create.class, Update.class}, message = "Название не может быть пустым")
