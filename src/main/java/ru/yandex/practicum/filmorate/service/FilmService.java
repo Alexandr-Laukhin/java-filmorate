@@ -53,6 +53,10 @@ public class FilmService {
         userStorage.getUserById(userId);
 
         likeStorage.addLike(filmId, userId);
+<<<<<<< HEAD
+=======
+        log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
     }
 
     public void removeLike(int filmId, int userId) {
@@ -60,6 +64,10 @@ public class FilmService {
         userStorage.getUserById(userId);
 
         likeStorage.removeLike(filmId, userId);
+<<<<<<< HEAD
+=======
+        log.info("Пользователь {} убрал лайк с фильма {}", userId, filmId);
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
     }
 
     public List<Film> getPopularFilms(int count) {

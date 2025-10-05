@@ -22,6 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({UserDbStorage.class})
 class FilmoRateApplicationTests {
     private final UserDbStorage userStorage;
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
     private User testUser;
     private User createdUser;
 
@@ -32,6 +36,10 @@ class FilmoRateApplicationTests {
         testUser.setLogin("testuser");
         testUser.setName("Test User");
         testUser.setBirthday(LocalDate.of(1990, 1, 1));
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
         createdUser = userStorage.createUser(testUser);
     }
 
@@ -71,4 +79,8 @@ class FilmoRateApplicationTests {
         User updatedUser = userStorage.updateUser(createdUpdateUser);
         assertThat(updatedUser.getName()).isEqualTo("Updated Name");
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e

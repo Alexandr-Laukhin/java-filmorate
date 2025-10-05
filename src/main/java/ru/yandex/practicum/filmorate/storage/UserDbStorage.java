@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.Date;
@@ -22,7 +23,6 @@ import java.util.Optional;
 public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
-
     private final RowMapper<User> userRowMapper = (rs, rowNum) -> {
         User user = new User();
         user.setId(rs.getInt("id"));
@@ -32,7 +32,8 @@ public class UserDbStorage implements UserStorage {
         Date birthday = rs.getDate("birthday");
         if (birthday != null) {
             user.setBirthday(birthday.toLocalDate());
-        }return user;
+        }
+        return user;
     };
 
     @Override
@@ -53,8 +54,10 @@ public class UserDbStorage implements UserStorage {
             ps.setDate(4, user.getBirthday() != null ? Date.valueOf(user.getBirthday()) : null);
             return ps;
         }, keyHolder);
-        user.setId(keyHolder.getKey().intValue());
-        log.info("Создан пользователь с id: {}", user.getId());
+        
+        int id = keyHolder.getKey().intValue();
+        user.setId(id);
+        log.info("Создан пользователь с id: {}", id);
         return user;
     }
 
@@ -67,10 +70,11 @@ public class UserDbStorage implements UserStorage {
             user.getName(),
             user.getBirthday() != null ? Date.valueOf(user.getBirthday()) : null,
             user.getId());
+        
         if (rowsUpdated == 0) {
-            throw new ru.yandex.practicum.filmorate.exception.NotFoundException(
-                    "Пользователь с id " + user.getId() + " не найден");
+            throw new NotFoundException("Пользователь с id " + user.getId() + " не найден");
         }
+        
         log.info("Обновлен пользователь с id: {}", user.getId());
         return user;
     }
@@ -80,8 +84,7 @@ public class UserDbStorage implements UserStorage {
         String sql = "SELECT * FROM users WHERE id = ?";
         List<User> users = jdbcTemplate.query(sql, userRowMapper, id);
         if (users.isEmpty()) {
-            throw new ru.yandex.practicum.filmorate.exception.NotFoundException(
-                    "Пользователь с id " + id + " не найден");
+            throw new NotFoundException("Пользователь с id " + id + " не найден");
         }
         return users.get(0);
     }
@@ -91,14 +94,14 @@ public class UserDbStorage implements UserStorage {
         String sql = "DELETE FROM users WHERE id = ?";
         int rowsDeleted = jdbcTemplate.update(sql, id);
         if (rowsDeleted == 0) {
-            throw new ru.yandex.practicum.filmorate.exception.NotFoundException(
-                    "Пользователь с id " + id + " не найден");
+            throw new NotFoundException("Пользователь с id " + id + " не найден");
         }
         log.info("Удален пользователь с id: {}", id);
     }
 
     public Optional<User> findUserById(int id) {
         String sql = "SELECT * FROM users WHERE id = ?";
-        List<User> users = jdbcTemplate.query(sql, userRowMapper, id);return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
+        List<User> users = jdbcTemplate.query(sql, userRowMapper, id);
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 }

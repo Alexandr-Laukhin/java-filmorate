@@ -51,6 +51,10 @@ public class UserService {
         userStorage.getUserById(friendId);
 
         friendshipStorage.addFriend(userId, friendId);
+<<<<<<< HEAD
+=======
+        log.info("Пользователь {} добавлен в друзья к пользователю {}", friendId, userId);
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
     }
 
     public void removeFriend(int userId, int friendId) {
@@ -58,12 +62,19 @@ public class UserService {
         userStorage.getUserById(friendId);
 
         friendshipStorage.removeFriend(userId, friendId);
+<<<<<<< HEAD
+=======
+        log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
     }
 
     public List<User> getFriends(int userId) {
         userStorage.getUserById(userId);
         List<User> friends = friendshipStorage.getFriends(userId);
+<<<<<<< HEAD
         
+=======
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
         log.info("Получен список друзей пользователя {}. Количество: {}", userId, friends.size());
         return friends;
     }
@@ -71,9 +82,13 @@ public class UserService {
     public List<User> getCommonFriends(int userId, int otherId) {
         userStorage.getUserById(userId);
         userStorage.getUserById(otherId);
+<<<<<<< HEAD
 
         List<User> commonFriends = friendshipStorage.getCommonFriends(userId, otherId);
+=======
+>>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
 
+        List<User> commonFriends = friendshipStorage.getCommonFriends(userId, otherId);
         log.info("Получен список общих друзей пользователей {} и {}. Количество: {}",
                 userId, otherId, commonFriends.size());
         return commonFriends;

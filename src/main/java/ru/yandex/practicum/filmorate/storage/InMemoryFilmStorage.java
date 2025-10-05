@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -49,6 +50,11 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new NotFoundException("Фильм с id " + id + " не найден");
         }
         return films.get(id);
+    }
+
+    @Override
+    public Optional<Film> findFilmById(int id) {
+        return Optional.ofNullable(films.get(id));
     }
 
     @Override

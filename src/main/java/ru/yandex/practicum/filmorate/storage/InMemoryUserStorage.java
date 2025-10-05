@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -51,6 +52,11 @@ public class InMemoryUserStorage implements UserStorage {
             throw new NotFoundException("Пользователь с id " + id + " не найден");
         }
         return users.get(id);
+    }
+
+    @Override
+    public Optional<User> findUserById(int id) {
+        return Optional.ofNullable(users.get(id));
     }
 
     @Override
