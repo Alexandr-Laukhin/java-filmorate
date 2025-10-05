@@ -21,7 +21,7 @@ public class LikeStorage {
     public void removeLike(int filmId, int userId) {
         String sql = "DELETE FROM likes WHERE film_id = ? AND user_id = ?";
         int rowsDeleted = jdbcTemplate.update(sql, filmId, userId);
-        
+
         if (rowsDeleted == 0) {
             log.info("Пользователь {} не ставил лайк фильму {}, операция пропущена", userId, filmId);
         } else {
