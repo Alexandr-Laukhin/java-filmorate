@@ -28,7 +28,8 @@ public class InMemoryFriendshipStorage implements FriendshipStorageInterface {
 
     @Override
     public void removeFriend(int userId, int friendId) {
-        friendships.removeIf(f -> f.getUserId().equals(userId) && f.getFriendId().equals(friendId));
+        friendships.removeIf(f -> f.getUserId().equals(userId) 
+                && f.getFriendId().equals(friendId));
         log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
     }
 
@@ -48,9 +49,15 @@ public class InMemoryFriendshipStorage implements FriendshipStorageInterface {
     @Override
     public List<User> getCommonFriends(int userId, int otherId) {
         List<User> commonFriends = new ArrayList<>();
-        List<Integer> userFriends = getFriends(userId).stream().mapToInt(User::getId).boxed().toList();
-        List<Integer> otherFriends = getFriends(otherId).stream().mapToInt(User::getId).boxed().toList();
-        
+        List<Integer> userFriends = getFriends(userId).stream()
+                .mapToInt(User::getId)
+                .boxed()
+                .toList();
+        List<Integer> otherFriends = getFriends(otherId).stream()
+                .mapToInt(User::getId)
+                .boxed()
+                .toList();
+
         for (Integer friendId : userFriends) {
             if (otherFriends.contains(friendId)) {
                 User friend = new User();
