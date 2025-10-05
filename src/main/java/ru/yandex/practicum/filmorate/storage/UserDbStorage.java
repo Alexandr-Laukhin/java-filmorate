@@ -8,6 +8,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -20,6 +21,7 @@ import ru.yandex.practicum.filmorate.model.User;
 @Component
 @Qualifier("userDbStorage")
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "spring.datasource.url")
 public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
