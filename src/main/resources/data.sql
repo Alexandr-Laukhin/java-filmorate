@@ -1,4 +1,4 @@
-INSERT INTO mpa_ratings (code, description) VALUES
+INSERT INTO mpa_ratings (name, description) VALUES
 ('G', 'у фильма нет возрастных ограничений'),
 ('PG', 'детям рекомендуется смотреть фильм с родителями'),
 ('PG-13', 'детям до 13 лет просмотр не желателен'),

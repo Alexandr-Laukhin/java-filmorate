@@ -179,7 +179,7 @@ public class FilmDbStorage implements FilmStorage {
         List<MpaRating> ratings = jdbcTemplate.query(sql, (rs, rowNum) -> {
             MpaRating rating = new MpaRating();
             rating.setId(rs.getInt("id"));
-            rating.setCode(rs.getString("code"));
+            rating.setName(rs.getString("name"));
             rating.setDescription(rs.getString("description"));
             return rating;
         }, id);

@@ -20,7 +20,7 @@ public class MpaRatingStorage {
     private final RowMapper<MpaRating> mpaRowMapper = (rs, rowNum) -> {
         MpaRating rating = new MpaRating();
         rating.setId(rs.getInt("id"));
-        rating.setCode(rs.getString("code"));
+        rating.setName(rs.getString("name"));
         rating.setDescription(rs.getString("description"));
         return rating;
     };
