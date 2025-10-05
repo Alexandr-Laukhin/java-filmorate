@@ -21,7 +21,6 @@ import ru.yandex.practicum.filmorate.model.User;
 @Component
 @Qualifier("userDbStorage")
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "spring.datasource.url")
 public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;

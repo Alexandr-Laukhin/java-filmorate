@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.model.User;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "spring.datasource.url")
 public class FriendshipStorage implements FriendshipStorageInterface {
 
     private final JdbcTemplate jdbcTemplate;

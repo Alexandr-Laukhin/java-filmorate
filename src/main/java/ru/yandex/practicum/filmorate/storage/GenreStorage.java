@@ -14,7 +14,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "spring.datasource.url")
 public class GenreStorage {
 
     private final JdbcTemplate jdbcTemplate;

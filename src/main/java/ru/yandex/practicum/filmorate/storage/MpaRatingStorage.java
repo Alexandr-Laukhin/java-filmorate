@@ -14,7 +14,6 @@ import ru.yandex.practicum.filmorate.model.MpaRating;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "spring.datasource.url")
 public class MpaRatingStorage {
 
     private final JdbcTemplate jdbcTemplate;

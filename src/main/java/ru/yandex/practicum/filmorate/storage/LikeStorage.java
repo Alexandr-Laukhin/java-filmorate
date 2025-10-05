@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "spring.datasource.url")
 public class LikeStorage implements LikeStorageInterface {
 
     private final JdbcTemplate jdbcTemplate;
