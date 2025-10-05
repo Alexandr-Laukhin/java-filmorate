@@ -28,7 +28,7 @@ public class InMemoryFriendshipStorage implements FriendshipStorageInterface {
 
     @Override
     public void removeFriend(int userId, int friendId) {
-        friendships.removeIf(f -> f.getUserId().equals(userId) 
+        friendships.removeIf(f -> f.getUserId().equals(userId)
                 && f.getFriendId().equals(friendId));
         log.info("Пользователь {} удален из друзей пользователя {}", friendId, userId);
     }
