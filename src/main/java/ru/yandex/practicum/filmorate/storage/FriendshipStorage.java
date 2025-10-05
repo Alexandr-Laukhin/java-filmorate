@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "spring.datasource.url")
-public class FriendshipStorage {
+public class FriendshipStorage implements FriendshipStorageInterface {
 
     private final JdbcTemplate jdbcTemplate;
 
