@@ -32,10 +32,6 @@ public class Film {
     private int duration;
 
     private Set<Integer> likes = new HashSet<>();
-<<<<<<< HEAD
-=======
-
->>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
     private Set<Genre> genres = new HashSet<>();
     private MpaRating mpa;
 }

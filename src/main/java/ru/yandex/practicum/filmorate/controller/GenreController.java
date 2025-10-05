@@ -2,14 +2,10 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-=======
-import org.springframework.web.bind.annotation.*;
->>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
 
@@ -39,8 +35,4 @@ public class GenreController {
         }
         return genre.get();
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 10448c9be0cb0a5825a0fa45bc444ab72bbe323e
