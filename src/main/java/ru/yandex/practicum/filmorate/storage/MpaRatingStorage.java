@@ -1,0 +1,38 @@
+package ru.yandex.practicum.filmorate.storage;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.MpaRating;
+
+import java.util.List;
+import java.util.Optional;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class MpaRatingStorage {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    private final RowMapper<MpaRating> mpaRowMapper = (rs, rowNum) -> {
+        MpaRating rating = new MpaRating();
+        rating.setId(rs.getInt("id"));
+        rating.setCode(rs.getString("code"));
+        rating.setDescription(rs.getString("description"));
+        return rating;
+    };
+
+    public List<MpaRating> getAllMpaRatings() {
+        String sql = "SELECT * FROM mpa_ratings ORDER BY id";
+        return jdbcTemplate.query(sql, mpaRowMapper);
+    }
+
+    public Optional<MpaRating> getMpaRatingById(int id) {
+        String sql = "SELECT * FROM mpa_ratings WHERE id = ?";
+        List<MpaRating> ratings = jdbcTemplate.query(sql, mpaRowMapper, id);
+        return ratings.isEmpty() ? Optional.empty() : Optional.of(ratings.get(0));
+    }
+}

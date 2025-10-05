@@ -11,8 +11,7 @@ import java.util.Set;
 
 @Data
 public class Film {
-    @NotNull(groups = Update.class, message = "Id обязателен для обновления")
-    private Integer id;
+    private int id;
 
     @NotBlank(groups = {Create.class, Update.class}, message = "Название не может быть пустым")
     private String name;
@@ -25,7 +24,7 @@ public class Film {
 
     @Positive(groups = {Create.class, Update.class},
             message = "Продолжительность фильма должна быть положительным числом")
-    private Integer duration;
+    private int duration;
 
     private Set<Integer> likes = new HashSet<>();
     
