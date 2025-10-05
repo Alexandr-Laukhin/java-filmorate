@@ -1,6 +1,10 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.model.validation.Create;
 import ru.yandex.practicum.filmorate.model.validation.Update;
@@ -28,7 +32,6 @@ public class Film {
     private int duration;
 
     private Set<Integer> likes = new HashSet<>();
-    
     private Set<Genre> genres = new HashSet<>();
     private MpaRating mpa;
 }

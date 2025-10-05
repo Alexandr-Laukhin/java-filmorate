@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({UserDbStorage.class})
 class FilmoRateApplicationTests {
     private final UserDbStorage userStorage;
-    
     private User testUser;
     private User createdUser;
 
@@ -33,7 +32,6 @@ class FilmoRateApplicationTests {
         testUser.setLogin("testuser");
         testUser.setName("Test User");
         testUser.setBirthday(LocalDate.of(1990, 1, 1));
-        
         createdUser = userStorage.createUser(testUser);
     }
 
