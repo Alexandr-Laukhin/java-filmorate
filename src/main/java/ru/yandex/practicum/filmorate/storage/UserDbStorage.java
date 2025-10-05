@@ -54,7 +54,7 @@ public class UserDbStorage implements UserStorage {
             ps.setDate(4, user.getBirthday() != null ? Date.valueOf(user.getBirthday()) : null);
             return ps;
         }, keyHolder);
-        
+
         int id = keyHolder.getKey().intValue();
         user.setId(id);
         log.info("Создан пользователь с id: {}", id);
@@ -70,11 +70,11 @@ public class UserDbStorage implements UserStorage {
             user.getName(),
             user.getBirthday() != null ? Date.valueOf(user.getBirthday()) : null,
             user.getId());
-        
+
         if (rowsUpdated == 0) {
             throw new NotFoundException("Пользователь с id " + user.getId() + " не найден");
         }
-        
+
         log.info("Обновлен пользователь с id: {}", user.getId());
         return user;
     }
