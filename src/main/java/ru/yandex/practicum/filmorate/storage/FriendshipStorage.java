@@ -24,7 +24,7 @@ public class FriendshipStorage {
     public void removeFriend(int userId, int friendId) {
         String sql = "DELETE FROM friendships WHERE user_id = ? AND friend_id = ?";
         int rowsDeleted = jdbcTemplate.update(sql, userId, friendId);
-        
+
         if (rowsDeleted == 0) {
             log.info("Пользователь {} не является другом пользователя {}, операция пропущена", friendId, userId);
         } else {
@@ -37,7 +37,7 @@ public class FriendshipStorage {
                     "FROM users u " +
                     "JOIN friendships f ON u.id = f.friend_id " +
                     "WHERE f.user_id = ?";
-        
+
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             User user = new User();
             user.setId(rs.getInt("id"));
@@ -57,7 +57,7 @@ public class FriendshipStorage {
                     "JOIN friendships f1 ON u.id = f1.friend_id " +
                     "JOIN friendships f2 ON u.id = f2.friend_id " +
                     "WHERE f1.user_id = ? AND f2.user_id = ?";
-        
+
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             User user = new User();
             user.setId(rs.getInt("id"));
