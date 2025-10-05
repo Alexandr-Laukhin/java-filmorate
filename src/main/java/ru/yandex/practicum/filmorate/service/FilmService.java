@@ -2,10 +2,12 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
@@ -17,8 +19,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class FilmService {
+    @Qualifier("filmDbStorage")
     private final FilmStorage filmStorage;
+    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
+    private final LikeStorage likeStorage;
     private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     public List<Film> getAllFilms() {
@@ -44,27 +49,18 @@ public class FilmService {
     }
 
     public void addLike(int filmId, int userId) {
-        Film film = filmStorage.getFilmById(filmId);
+        filmStorage.getFilmById(filmId);
         userStorage.getUserById(userId);
 
-        if (film.getLikes().contains(userId)) {
-            log.warn("Пользователь {} уже поставил лайк фильму {}", userId, filmId);
-            throw new ValidationException("Пользователь уже поставил лайк этому фильму");
-        }
-
-        film.getLikes().add(userId);
+        likeStorage.addLike(filmId, userId);
         log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
     }
 
     public void removeLike(int filmId, int userId) {
-        Film film = filmStorage.getFilmById(filmId);
+        filmStorage.getFilmById(filmId);
         userStorage.getUserById(userId);
 
-        if (!film.getLikes().contains(userId)) {
-            log.info("Пользователь {} не ставил лайк фильму {}, операция пропущена", userId, filmId);
-            return;
-        }
-        film.getLikes().remove(userId);
+        likeStorage.removeLike(filmId, userId);
         log.info("Пользователь {} убрал лайк с фильма {}", userId, filmId);
     }
 
