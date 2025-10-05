@@ -24,7 +24,7 @@ import ru.yandex.practicum.filmorate.model.MpaRating;
 @Component
 @Qualifier("filmDbStorage")
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "spring.datasource.url")
+@ConditionalOnProperty(name = "spring.datasource.url", havingValue = "jdbc:h2:file:./db/filmorate")
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;

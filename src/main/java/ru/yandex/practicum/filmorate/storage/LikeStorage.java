@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "spring.datasource.url")
+@ConditionalOnProperty(name = "spring.datasource.url", havingValue = "jdbc:h2:file:./db/filmorate")
 public class LikeStorage implements LikeStorageInterface {
 
     private final JdbcTemplate jdbcTemplate;

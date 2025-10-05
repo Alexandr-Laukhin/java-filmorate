@@ -12,7 +12,7 @@ import ru.yandex.practicum.filmorate.model.User;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "spring.datasource.url")
+@ConditionalOnProperty(name = "spring.datasource.url", havingValue = "jdbc:h2:file:./db/filmorate")
 public class FriendshipStorage implements FriendshipStorageInterface {
 
     private final JdbcTemplate jdbcTemplate;
