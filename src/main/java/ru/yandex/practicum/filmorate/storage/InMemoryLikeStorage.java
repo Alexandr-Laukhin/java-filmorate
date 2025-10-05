@@ -1,11 +1,11 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Slf4j
 @Component
